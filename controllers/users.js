@@ -55,11 +55,12 @@ const usersPost = async (req, res) => {
 const usersDelete = async (req, res) => {
     const { id } = req.params;
 
-    //delete
-    // const user = await UserModel.findByIdAndDelete(id);
     const user = await UserModel.findByIdAndUpdate(id, { state: false });
+
+    const userAuth = req.user;
     res.json({
         user,
+        userAuth,
     });
 };
 

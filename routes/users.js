@@ -6,13 +6,19 @@ const {
     usersPut,
     usersPost,
 } = require("../controllers/users");
+
 const {
     isValidRole,
     existsEmail,
     existsUserById,
 } = require("../helpers/db-validators");
 
-const { validateInputs } = require("../middlewares/validate-inputs");
+const {
+    validateInputs,
+    validateJWT,
+    isAdminRole,
+    hasRole,
+} = require("../middlewares");
 
 const router = Router();
 
@@ -49,6 +55,9 @@ router.post(
 router.delete(
     "/:id",
     [
+        validateJWT,
+        isAdminRole,
+        hasRole("ADMIN_ROLE", "VENTAS_ROL"),
         check("id", "No es un id valido").isMongoId(),
         check("id").custom((id) => existsUserById(id)),
         validateInputs,
